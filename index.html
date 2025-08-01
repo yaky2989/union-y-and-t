@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Union Yappers and Testers</title>
+    <!-- Import Bebas Neue from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- html2canvas for screenshot functionality -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <style>
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200"><filter id="f"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0"/></filter><rect width="100%" height="100%" filter="url(%23f)"/></svg>'),
+                url('./assets/images/bg.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            opacity: 0.7;
+            z-index: -1;
+            animation: smokeAnimation 10s linear infinite;
+            will-change: transform, filter;
+        }
+
+        @keyframes smokeAnimation {
+            0% {
+                transform: scale(1) rotate(0deg);
+                filter: blur(0px);
+            }
+            25% {
+                transform: scale(1.1) rotate(1deg);
+                filter: blur(1px);
+            }
+            50% {
+                transform: scale(1.05) rotate(-1deg);
+                filter: blur(0.5px);
+            }
+            75% {
+                transform: scale(1.1) rotate(1deg);
+                filter: blur(1px);
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                filter: blur(0px);
+            }
+        }
+
+        body {
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 1px; 
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding-top: 60px;
+            background-image: url('./assets/images/bg.png');
+            background-position:inherit;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        
+        .evaluation-card {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #fff
+        }
+        
+        .creator {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+        
+        .username {
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #fff
+        }
+        
+        .form-control {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: black !important;
+            color: white !important;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .btn-submit {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-submit:hover {
+            background-color: #212121;
+        }
+        
+        .footer {
+            font-size: 0.8rem;
+            color: #fff;
+            margin-top: 1.5rem;
+        }
+ 
+        .simple-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #000;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        
+        .logo {
+            width: 7%;
+            margin-right: 10px;
+        }
+        
+        .header-title {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            text-transform: lowercase;
+            font-size: 1.2rem;
+            font-weight: 300;
+            margin: 0;
+        }
+
+        /* Results page styles */
+        .result-container {
+            display: none;
+            text-align: center;
+            color: white;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .result-percentage {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+
+        .result-description {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .advice {
+            background-color: rgba(0,0,0,0.5);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .advice h4 {
+            color: #ff8a00;
+            margin-bottom: 10px;
+        }
+
+        .advice ul {
+            padding-left: 20px;
+        }
+
+        .advice li {
+            margin-bottom: 8px;
+        }
+
+        .btn-twitter {
+            background-color: #1DA1F2;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-twitter:hover {
+            background-color: #1991db;
+        }
+
+        .back-button {
+            background-color: #000;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: rgba(255,255,255,0.2);
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .progress-bar {
+            height: 20px;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #ff8a00, #e52e71);
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease-in-out;
+        }
+
+        .rating-type {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #ff8a00;
+        }
+
+        .breakdown-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+        }
+
+        .breakdown-item {
+            width: 48%;
+            background-color: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .breakdown-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .breakdown-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .yapper-value {
+            color: #e52e71;
+        }
+
+        .tester-value {
+            color: #1DA1F2;
+        }
+
+        .quick-wins {
+            background-color: rgba(0,0,0,0.3);
+            border-left: 4px solid #ff8a00;
+            padding: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .quick-wins h4 {
+            color: #ff8a00;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+     <header class="simple-header">
+        <div class="header-content">
+            <img src="./assets/images/logo.png" class="logo" alt="Union logo" />
+            <h1 class="header-title">by <a href="https://x.com/yakymoney" target="_blank" rel="noopener noreferrer" style="color: white; text-decoration: none;">@yakymoney</a></h1>
+        </div>
+    </header>
+    
+    <!-- Evaluation Form -->
+    <div class="evaluation-card" id="evaluationForm">
+         <div class="title">Union Yappers vs Testers</div>
+        <form id="unionForm">
+            <label for="usernameInput" class="form-label">Enter X handle (without @)</label>
+            <input type="text" id="usernameInput" class="form-control" required>
+
+            <label for="levelInput" class="form-label">Enter dashboard level (4-10)</label>
+            <input type="number" id="levelInput" class="form-control" min="1" max="10" required>
+            <button type="submit" class="btn-submit">Submit</button>
+        </form>
+    </div>
+
+    <!-- Results Display -->
+    <div class="evaluation-card result-container" id="resultsDisplay">
+        <div class="result-title">Your Union Rating</div>
+        <div class="user-info">
+            <img id="userAvatar" class="user-avatar" src="" alt="User avatar">
+            <div>
+                <div id="userName" class="username"></div>
+                <div id="userLevel" class="creator"></div>
+            </div>
+        </div>
+        
+        <div id="ratingType" class="rating-type"></div>
+        
+        <!-- Breakdown of Yapper vs Tester -->
+        <div class="breakdown-container">
+            <div class="breakdown-item">
+                <div class="breakdown-title">Yapper Score</div>
+                <div id="yapperScore" class="breakdown-value yapper-value">60%</div>
+            </div>
+            <div class="breakdown-item">
+                <div class="breakdown-title">Tester Score</div>
+                <div id="testerScore" class="breakdown-value tester-value">40%</div>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div id="progressBar" class="progress-bar" style="width: 0%">0%</div>
+        </div>
+        
+        <div id="resultPercentage" class="result-percentage"></div>
+        <div id="resultDescription" class="result-description"></div>
+        
+        <div class="quick-wins">
+            <h4>Quick Ways to Improve</h4>
+            <ul>
+                <li>Complete more testnet tasks before TGE </li>
+                <li>Complete them BSC and Osmosis tasks if you haven't</li>
+                <li>Create more threads about Union build</li>
+            </ul>
+            <div style="text-align: center;">zkgm 🦈</div>
+        </div>
+        
+        <button id="twitterShare" class="btn-twitter">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+            </svg>
+            Share on X
+        </button>
+        <button class="back-button" id="backButton">Evaluate Another</button>
+
+        <div style="text-align: center; margin-top: 20px; font-size: 14px; color: rgb(247, 244, 244);"> 
+  <br> built by 
+  <a href="https://x.com/yakymoney" target="_blank" style="color: rgb(244, 243, 243); text-decoration: underline;">@yakymoney</a>
+</div>
+    </div>
+
+    
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Configuration - editable conditions
+        const ratingConfig = {
+            yapper: {
+                thresholds: [
+                    { min: 0.1, rating: 100, title: "Elite Yapper" },
+                    { min: 0.01, max: 0.099, rating: 80, title: "Strong Yapper" },
+                    { min: 0.005, max: 0.00999, rating: 60, title: "Developing Yapper" },
+                    { min: 0, max: 0.00499, rating: 0, title: "Needs Improvement" }
+                ]
+            },
+            tester: {
+                levels: {
+                    1: 10, 2: 20, 3: 30, 4: 40, 5: 50, 
+                    6: 60, 7: 70, 8: 80, 9: 90, 10: 100
+                },
+                titles: {
+                    100: "Master Tester",
+                    80: "Advanced Tester",
+                    60: "Intermediate Tester",
+                    default: "Novice Tester"
+                }
+            }
+        };
+
+        // Initialize form submission
+        document.getElementById('unionForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('usernameInput').value.trim().toLowerCase();
+            const level = parseInt(document.getElementById('levelInput').value);
+            
+            // Search for user in both seasons
+            const userSeason0 = findUserInSeason(season0, username);
+            const userSeason1 = findUserInSeason(season1, username);
+            
+            // Calculate ratings
+            const yapperRating = calculateYapperRating(userSeason0, userSeason1);
+            const testerRating = calculateTesterRating(level);
+            
+            // Determine primary rating (Yapper or Tester)
+            const primaryRating = determinePrimaryRating(yapperRating, testerRating);
+            
+            // Display results
+            displayResults(username, level, primaryRating, yapperRating, testerRating, userSeason0, userSeason1);
+        });
+
+        // Back button functionality
+        document.getElementById('backButton').addEventListener('click', function() {
+            document.getElementById('evaluationForm').style.display = 'block';
+            document.getElementById('resultsDisplay').style.display = 'none';
+            document.getElementById('unionForm').reset();
+        });
+
+        // Twitter share functionality
+        document.getElementById('twitterShare').addEventListener('click', shareOnTwitter);
+
+        function findUserInSeason(seasonData, username) {
+            return seasonData.find(user => user.username.toLowerCase() === username);
+        }
+
+        function parseMindshare(mindshare) {
+            if (typeof mindshare === 'string' && mindshare.includes('%')) {
+                return parseFloat(mindshare);
+            }
+            return parseFloat(mindshare) * 100; // Convert decimal to percentage
+        }
+
+        function calculateYapperRating(userSeason0, userSeason1) {
+            // Get mindshare values (convert season1 to percentage)
+            const mindshare0 = userSeason0 ? parseMindshare(userSeason0.mindshare) : 0;
+            const mindshare1 = userSeason1 ? parseMindshare(userSeason1.mindshare) : 0;
+            
+            // Use the higher mindshare value
+            const maxMindshare = Math.max(mindshare0, mindshare1);
+            
+            // Find matching threshold
+            const threshold = ratingConfig.yapper.thresholds.find(t => 
+                maxMindshare >= t.min && (!t.max || maxMindshare < t.max)
+            );
+            
+            return {
+                rating: threshold ? threshold.rating : 0,
+                title: threshold ? threshold.title : "Needs Improvement",
+                mindshare: maxMindshare,
+                type: "yapper"
+            };
+        }
+
+        function calculateTesterRating(level) {
+            const rating = ratingConfig.tester.levels[level] || 0;
+            let title;
+            
+            if (rating >= 90) title = ratingConfig.tester.titles[100];
+            else if (rating >= 70) title = ratingConfig.tester.titles[80];
+            else if (rating >= 50) title = ratingConfig.tester.titles[60];
+            else title = ratingConfig.tester.titles.default;
+            
+            return {
+                rating,
+                title,
+                level,
+                type: "tester"
+            };
+        }
+
+        function determinePrimaryRating(yapperRating, testerRating) {
+            // Calculate composite score (60% yapper, 40% tester)
+            const compositeScore = (yapperRating.rating * 0.6) + (testerRating.rating * 0.4);
+            const isYapperDominant = yapperRating.rating >= testerRating.rating;
+            
+            // If level is below 4, focus on tester improvement
+            if (testerRating.level < 4) {
+                return {
+                    type: "tester",
+                    rating: Math.round(compositeScore),
+                    title: testerRating.title,
+                    message: `Your testing level is too low (${testerRating.level})`,
+                    advice: "Focus on improving your clicking! Reach at least level 4 to get better rewards. Complete more testnet tasks on Osmosis and BSC routes."
+                };
+            }
+            
+            // If yapper rating is higher or equal, use that
+            if (isYapperDominant) {
+                return {
+                    type: "yapper",
+                    rating: Math.round(compositeScore),
+                    title: yapperRating.title,
+                    // message: `Your mindshare is ${yapperRating.mindshare.toFixed(2)}%`,
+                    advice: yapperRating.rating >= 80 ? 
+                        "Great yapping! Now focus on completing testnet tasks to balance your skills." :
+                        "Keep engaging with the community to boost your yapping score."
+                };
+            }
+            
+            // Otherwise use tester rating
+            return {
+                type: "tester",
+                rating: Math.round(compositeScore),
+                title: testerRating.title,
+                // message: `Your testing level is ${testerRating.level}`,
+                advice: testerRating.rating >= 80 ?
+                    "Excellent testing! Now engage more with the community to boost your yapping." :
+                    "Good testing progress! Complete more tasks and engage in discussions."
+            };
+        }
+
+        function displayResults(username, level, result, yapperRating, testerRating, userSeason0, userSeason1) {
+            // Hide form and show results
+            document.getElementById('evaluationForm').style.display = 'none';
+            document.getElementById('resultsDisplay').style.display = 'block';
+            
+            // Set user info
+            document.getElementById('userName').textContent = '@' + username;
+            document.getElementById('userLevel').textContent = 'Level ' + level;
+            document.getElementById('ratingType').textContent = result.title;
+            
+            // Set breakdown scores
+            document.getElementById('yapperScore').textContent = yapperRating.rating + '%';
+            document.getElementById('testerScore').textContent = testerRating.rating + '%';
+            
+            // Set avatar (prioritize season0 pfp if available)
+            const avatarSrc = (userSeason0 || userSeason1)?.pfp || 
+                             'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+            document.getElementById('userAvatar').src = avatarSrc;
+            
+            // Animate progress bar
+            const progressBar = document.getElementById('progressBar');
+            let width = 0;
+            const interval = setInterval(() => {
+                if (width >= result.rating) {
+                    clearInterval(interval);
+                } else {
+                    width++;
+                    progressBar.style.width = width + '%';
+                    progressBar.textContent = width + '%';
+                }
+            }, 20);
+            
+            // Set rating info
+            document.getElementById('resultPercentage').textContent = result.rating + '% Union Active';
+            document.getElementById('resultDescription').textContent = result.message;
+        }
+
+        function shareOnTwitter() {
+            // Capture the results card as an image
+            html2canvas(document.getElementById('resultsDisplay')).then(canvas => {
+                canvas.toBlob(function(blob) {
+                    // For demo purposes, we'll just open Twitter with text
+                    // In production, you would upload the image first
+                    const text = `I just scored ${document.getElementById('resultPercentage').textContent} as a ${document.getElementById('ratingType').textContent} on Union Yappers vs Testers! \n\nCheck yours here: https://app.union.build/yaps`;
+                    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+                    window.open(twitterUrl, '_blank');
+                }, 'image/png');
+            });
+        }
+
+        
+
+      </script>
+
+
+    <script src="./js/season0.js"></script>
+    <script src="./js/season1.js"></script>
+</body>
+</html>
