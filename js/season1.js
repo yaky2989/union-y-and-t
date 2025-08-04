@@ -3,7 +3,7 @@ const season1  = [
   {
     "user_id": "1482640180855160832",
     "username": "banditxbt",
-    "mindshare": "0.0052699727578073875",
+    "mindshare": "0.0060699727578073875",
     "twitter_id": 1482640180855160800,
     "pfp": "https://pbs.twimg.com/profile_images/1923661282206511104/miKN7Xm8_normal.jpg",
     "team": false
@@ -723,7 +723,7 @@ const season1  = [
   {
     "user_id": "1547302457432236035",
     "username": "wyckoffweb",
-    "mindshare": "0.0015667966507781183",
+    "mindshare": "0.0043667966507781183",
     "twitter_id": 1547302457432236000,
     "pfp": "https://pbs.twimg.com/profile_images/1810337639226040320/aBjQWOkT_normal.png",
     "team": false
@@ -939,7 +939,7 @@ const season1  = [
   {
     "user_id": "839621821",
     "username": "gomtu_xyz",
-    "mindshare": "0.0013837333572351363",
+    "mindshare": "0.0045837333572351363",
     "twitter_id": 839621821,
     "pfp": "https://pbs.twimg.com/profile_images/1937781703118032896/TXlXSKJb_normal.jpg",
     "team": false
@@ -2731,7 +2731,7 @@ const season1  = [
   {
     "user_id": "1560148488683282432",
     "username": "Shinosuka_eth",
-    "mindshare": "0.0007290256465084803",
+    "mindshare": "0.0050290256465084803",
     "twitter_id": 1560148488683282400,
     "pfp": "https://pbs.twimg.com/profile_images/1940306933660991488/4LNhpEcg_normal.jpg",
     "team": false
@@ -7999,5 +7999,13 @@ const season1  = [
     "twitter_id": 1772012215593242600,
     "pfp": "https://pbs.twimg.com/profile_images/1854911957070999552/EaRPbd-s_normal.jpg",
     "team": false
-  }
+  },
+  {
+    "user_id": "112705099",
+    "username": "maziibe_",
+    "mindshare": "0.00050757659330466966",
+    "twitter_id": 112705099,
+    "pfp": "https://pbs.twimg.com/profile_images/1917119717229068288/umancsJ6_normal.png",
+    "team": false
+  },
 ]

@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Union Yappers and Testers</title>
-    <!-- Import Bebas Neue from Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <!-- Import Geist Mono from Vercel -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/geist-mono@4.5.4/index.min.css">
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- html2canvas for screenshot functionality -->
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <!-- Chart.js for level distribution -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body::before {
             content: "";
@@ -56,7 +56,7 @@
         }
 
         body {
-            font-family: 'Bebas Neue', sans-serif;
+            font-family: 'Geist Mono', monospace;
             letter-spacing: 1px; 
             background-color: #f8f9fa;
             display: flex;
@@ -91,7 +91,8 @@
         
         .creator {
             font-size: 0.9rem;
-            color: #979b99;
+            font-weight: bold;
+            color: #9ebcc0;
             margin-bottom: 0.5rem;
         }
         
@@ -175,7 +176,7 @@
             left: 50%;
             transform: translateX(-50%);
             text-transform: lowercase;
-            font-size: 1.2rem;
+            font-size: 1.0rem;
             font-weight: 300;
             margin: 0;
         }
@@ -189,7 +190,9 @@
 
         .result-title {
             font-size: 2rem;
+            font-weight: 700;
             margin-bottom: 1rem;
+
         }
 
         .result-percentage {
@@ -276,18 +279,19 @@
         }
 
         .progress-bar {
-            height: 20px;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #ff8a00, #e52e71);
-            text-align: center;
-            line-height: 20px;
-            color: white;
-            font-weight: bold;
-            transition: width 1s ease-in-out;
-        }
+    height: 20px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ff8a00, #e52e71);
+    /* Remove text alignment and line-height properties */
+    transition: width 1s ease-in-out;
+    /* Add this to hide any text content */
+    color: transparent;
+    text-indent: -9999px;
+}
 
         .rating-type {
             font-size: 1.5rem;
+            font-weight: bold;
             margin-bottom: 0.5rem;
             color: #ff8a00;
         }
@@ -336,6 +340,108 @@
             color: #ff8a00;
             margin-bottom: 5px;
         }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid #fff;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Error message */
+        .error-message {
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        /* New styles for the zkgm splash */
+        .zkgm-splash {
+            font-size: 2rem;
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            animation-delay: 1.5s;
+        }
+
+        .zkgm-splash span {
+            display: inline-block;
+            margin: 0 5px;
+            transform: rotate(0deg);
+            animation: bounce 1s infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+        @keyframes bounce {
+            to { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        /* Animation for result elements */
+        .animate-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.5s forwards;
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* User stats container */
+        .user-stats {
+            margin: 15px 0;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards;
+            animation-delay: 0.8s;
+        }
+
+        /* Delay animations for each element */
+        .result-title { animation-delay: 0.1s; }
+        .user-info { animation-delay: 0.2s; }
+        .rating-type { animation-delay: 0.3s; }
+        .breakdown-container { animation-delay: 0.4s; }
+        .progress-container { animation-delay: 0.5s; }
+        .result-percentage { animation-delay: 0.6s; }
+        .result-description { animation-delay: 0.7s; }
+        .quick-wins { animation-delay: 0.9s; }
+        .btn-twitter { animation-delay: 1s; }
+        .back-button { animation-delay: 1.1s; }
+
+        /* Special styles for Union members */
+        .union-badge {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #ff8a00;
+            /* text-shadow: 0 0 5px rgba(255,215,0,0.7); */
+            margin: 15px 0;
+        }
+
+        .stars {
+            font-size: 1.8rem;
+            letter-spacing: 5px;
+            color: gold;
+            margin: 10px 0;
+        }
+
+        .special-member {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -352,28 +458,34 @@
         <form id="unionForm">
             <label for="usernameInput" class="form-label">Enter X handle (without @)</label>
             <input type="text" id="usernameInput" class="form-control" required>
-
-            <label for="levelInput" class="form-label">Enter dashboard level (4-10)</label>
-            <input type="number" id="levelInput" class="form-control" min="1" max="10" required>
-            <button type="submit" class="btn-submit">Submit</button>
+            <div id="loadingIndicator" style="display: none;">
+                <div class="spinner"></div>
+                <span>Fetching your Union stats...</span>
+            </div>
+            <div id="errorMessage" class="error-message"></div>
+            <button type="submit" class="btn-submit" id="submitButton">Submit</button>
         </form>
     </div>
 
     <!-- Results Display -->
     <div class="evaluation-card result-container" id="resultsDisplay">
-        <div class="result-title">Your Union Rating</div>
-        <div class="user-info">
+        <div class="result-title animate-in">Your Union Rating</div>
+        <div> <br> </div> 
+        <div class="user-info animate-in">
             <img id="userAvatar" class="user-avatar" src="" alt="User avatar">
             <div>
                 <div id="userName" class="username"></div>
-                <div id="userLevel" class="creator"></div>
             </div>
         </div>
-        
-        <div id="ratingType" class="rating-type"></div>
+        <div class="user-stats">
+            <div id="userLevel" class="creator"></div>
+            <div id="userTitle" class="creator"></div>
+            <div id="userXP" class="creator"></div>
+        </div>
+        <div id="ratingType" class="rating-type animate-in"></div>
         
         <!-- Breakdown of Yapper vs Tester -->
-        <div class="breakdown-container">
+        <div class="breakdown-container animate-in">
             <div class="breakdown-item">
                 <div class="breakdown-title">Yapper Score</div>
                 <div id="yapperScore" class="breakdown-value yapper-value">60%</div>
@@ -384,54 +496,132 @@
             </div>
         </div>
         
-        <div class="progress-container">
-            <div id="progressBar" class="progress-bar" style="width: 0%">0%</div>
+        <div class="progress-container animate-in">
+            <div id="progressBar" class="progress-bar" style="width: 0%"></div>
         </div>
         
-        <div id="resultPercentage" class="result-percentage"></div>
-        <div id="resultDescription" class="result-description"></div>
+        <div id="resultPercentage" class="result-percentage animate-in"></div>
         
-        <div class="quick-wins">
-            <h4>Quick Ways to Be More Active</h4>
+        <!-- User stats moved below percentage -->
+        
+        
+        <div id="resultDescription" class="result-description animate-in"></div>
+        
+        <div class="quick-wins animate-in">
+            <h4>To Be More Active</h4>
             <ul>
                 <li>Engage @union_build tweets </li>
-                <li>Complete more testnet tasks if any </li>
                 <li>Complete BSC and Osmosis tasks if you haven't</li>
                 <li>Create more threads about Union build</li>
             </ul>
-            <div style="text-align: center;">zkgm 🦈</div>
         </div>
-         <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #f4f3f2"> 
-   Take a screenshot and click share </a>
-</div>
         
-        <button id="twitterShare" class="btn-twitter">
+        <!-- Special Union Member Display -->
+        <div id="specialMemberDisplay" class="special-member">
+            <div id="unionBadge" class="union-badge"></div>
+            <div class="stars">★★★★★</div>
+        </div>
+        
+        <!-- zkgm splash -->
+         <div> <br> </div>
+        <div class="zkgm-splash">
+            <span>z</span>
+            <span>k</span>
+            <span>g</span>
+            <span>m</span>
+            <span>🦈</span>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; font-size: 14px; color: #f4f3f2" class="animate-in"> 
+            Take a screenshot and click share
+        </div>
+        
+        <button id="twitterShare" class="btn-twitter animate-in">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
                 <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
             </svg>
             Share on X
         </button>
-        <button class="back-button" id="backButton">Evaluate Another</button>
+        <button class="back-button animate-in" id="backButton">Evaluate Another</button>
 
-       
-        <div style="text-align: center; margin-top: 20px; font-size: 14px; color: rgb(247, 244, 244);"> 
-  <br> built by 
-  <a href="https://x.com/yakymoney/status/1951237017817284639" target="_blank" style="color: rgb(244, 243, 243); text-decoration: underline;">@yakymoney</a>
-</div>
+        <div style="text-align: center; margin-top: 20px; font-size: 14px; color: rgb(247, 244, 244);" class="animate-in"> 
+            <br> built by 
+            <a href="https://x.com/yakymoney/status/1951237017817284639" target="_blank" style="color: rgb(244, 243, 243); text-decoration: underline;">@yakymoney</a>
+        </div>
     </div>
-
-    
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // === Supabase Configuration ===
+        const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2dmxxYnR3cWV0bHRkY3Zpb2llIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQwMjM4MzMsImV4cCI6MjA2OTU5OTgzM30.d-leDFpzc6uxDvq47_FC0Fqh0ztaL11Oozm-z6T9N_M';
+        const SUPABASE_URL = 'https://bvvlqbtwqetltdcvioie.supabase.co/rest/v1';
+
+        // Special Union members
+        const UNION_FOUNDER = ["0xkaiserkarel"];
+        const UNION_COFOUNDERS = ["e_beriker", "corcoder"];
+        const UNION_TEAM = ["loveneeshdhir", "0xc0dejug", "0x_robbie"];
+
+        // Fallback profile picture generator
+        function getFallbackPfp(username) {
+            const seed = encodeURIComponent(username || 'uniontester');
+            return `https://api.dicebear.com/7.x/fun-emoji/svg?seed=${seed}`;
+        }
+
+        // Function to get profile picture from season data
+        function getProfilePictureFromSeasons(username) {
+            // Check season0 first
+            const season0User = season0.find(user => user.username.toLowerCase() === username.toLowerCase());
+            if (season0User && season0User.pfp) return season0User.pfp;
+            
+            // Then check season1
+            const season1User = season1.find(user => user.username.toLowerCase() === username.toLowerCase());
+            if (season1User && season1User.pfp) return season1User.pfp;
+            
+            // If not found in either season, return fallback
+            return getFallbackPfp(username);
+        }
+
+        // Fetch user from Supabase leaderboard
+        async function fetchUserFromLeaderboard(username) {
+            const headers = {
+                'apikey': API_KEY,
+                'Authorization': `Bearer ${API_KEY}`,
+                'Content-Type': 'application/json'
+            };
+            const queries = [
+                `display_name=ilike.${username}`,
+                `username=ilike.${username}`,
+                `display_name=ilike.%${username}%`,
+                `username=ilike.%${username}%`
+            ];
+            
+            for (const query of queries) {
+                try {
+                    const res = await fetch(`${SUPABASE_URL}/leaderboard_full_0208?${query}`, { headers });
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.length) {
+                            return data.find(d =>
+                                (d.display_name || '').toLowerCase() === username.toLowerCase() ||
+                                (d.username || '').toLowerCase() === username.toLowerCase()
+                            ) || data[0];
+                        }
+                    }
+                } catch (error) {
+                    console.error('Fetch error:', error);
+                }
+            }
+            return null;
+        }
+
         // Configuration - editable conditions
         const ratingConfig = {
             yapper: {
                 thresholds: [
-                    { min: 0.1, rating: 100, title: "Elite Yapper" },
-                    { min: 0.01, max: 0.099, rating: 80, title: "Goblin Yapper" },
-                    { min: 0.005, max: 0.00999, rating: 60, title: "Developing Yapper" },
+                    { min: 0.1, rating: 100, title: "Goblin Yapper" },
+                    { min: 0.01, max: 0.099, rating: 80, title: "WhaleShark Yapper" },
+                    { min: 0.005, max: 0.00999, rating: 60, title: "Junior Yapper" },
                     { min: 0, max: 0.00499, rating: 40, title: "Needs Improvement" }
                 ]
             },
@@ -441,48 +631,104 @@
                     6: 60, 7: 70, 8: 80, 9: 90, 10: 100
                 },
                 titles: {
-                    100: "Master Tester",
-                    80: "Goblin Tester",
-                    60: "Intermediate Tester",
+                    100: "Goblin Tester",
+                    80: "WhaleShark Tester",
+                    60: "Junior Tester",
                     default: "Novice Tester"
                 }
             }
         };
 
         // Initialize form submission
-        document.getElementById('unionForm').addEventListener('submit', function(e) {
+        document.getElementById('unionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const username = document.getElementById('usernameInput').value.trim().toLowerCase();
-            const level = parseInt(document.getElementById('levelInput').value);
-            
-            // Search for user in both seasons
-            const userSeason0 = findUserInSeason(season0, username);
-            const userSeason1 = findUserInSeason(season1, username);
-            
-            // Calculate ratings
-            const yapperRating = calculateYapperRating(userSeason0, userSeason1);
-            const testerRating = calculateTesterRating(level);
-            
-            // Determine primary rating (Yapper or Tester)
-            const primaryRating = determinePrimaryRating(yapperRating, testerRating);
-            
-            // Display results
-            displayResults(username, level, primaryRating, yapperRating, testerRating, userSeason0, userSeason1);
+            if (!username) {
+                showError('Please enter a username');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('loadingIndicator').style.display = 'block';
+            document.getElementById('submitButton').disabled = true;
+            document.getElementById('errorMessage').textContent = '';
+
+            try {
+                // Check if this is a special Union member
+                const isFounder = UNION_FOUNDER.includes(username);
+                const isCoFounder = UNION_COFOUNDERS.includes(username);
+                const isTeamMember = UNION_TEAM.includes(username);
+                
+                if (isFounder || isCoFounder || isTeamMember) {
+                    // For special members, show simplified display
+                    displaySpecialMember(username, isFounder, isCoFounder, isTeamMember);
+                    return;
+                }
+
+                // For regular users, proceed with normal evaluation
+                const user = await fetchUserFromLeaderboard(username);
+                if (!user) {
+                    showError('User not found. Please check the username!');
+                    return;
+                }
+
+                // Parse user data
+                let json = {};
+                try {
+                    json = typeof user.jsonInput === 'string' ? JSON.parse(user.jsonInput) : user.jsonInput || {};
+                } catch {}
+
+                const level = json.level || user.level || 1;
+                const title = json.title || user.title || 'Tester';
+                const xp = json.total_xp || user.total_xp || 0;
+                const rank = user.rank || json.rank;
+
+                // Search for user in both seasons
+                const userSeason0 = findUserInSeason(season0, username);
+                const userSeason1 = findUserInSeason(season1, username);
+                
+                // Calculate ratings
+                const yapperRating = calculateYapperRating(userSeason0, userSeason1);
+                const testerRating = calculateTesterRating(level);
+                
+                // Determine primary rating (Yapper or Tester)
+                const primaryRating = determinePrimaryRating(yapperRating, testerRating);
+                
+                // Display results
+                displayResults(username, level, title, xp, primaryRating, yapperRating, testerRating, userSeason0, userSeason1, user);
+
+            } catch (error) {
+                console.error('Error:', error);
+                showError('Failed to fetch user data. Please try again later.');
+            } finally {
+                document.getElementById('loadingIndicator').style.display = 'none';
+                document.getElementById('submitButton').disabled = false;
+            }
         });
+
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+        }
 
         // Back button functionality
         document.getElementById('backButton').addEventListener('click', function() {
             document.getElementById('evaluationForm').style.display = 'block';
             document.getElementById('resultsDisplay').style.display = 'none';
             document.getElementById('unionForm').reset();
+            // Hide special member display if it was shown
+            document.getElementById('specialMemberDisplay').style.display = 'none';
+            // Show regular elements
+            document.querySelectorAll('.breakdown-container, .progress-container, .quick-wins, .rating-type, .result-percentage, .result-description').forEach(el => {
+                el.style.display = '';
+            });
         });
 
         // Twitter share functionality
         document.getElementById('twitterShare').addEventListener('click', shareOnTwitter);
 
         function findUserInSeason(seasonData, username) {
-            return seasonData.find(user => user.username.toLowerCase() === username);
+            return seasonData.find(user => user.username.toLowerCase() === username.toLowerCase());
         }
 
         function parseMindshare(mindshare) {
@@ -552,7 +798,6 @@
                     type: "yapper",
                     rating: Math.round(compositeScore),
                     title: yapperRating.title,
-                    // message: `Your mindshare is ${yapperRating.mindshare.toFixed(2)}%`,
                     advice: yapperRating.rating >= 80 ? 
                         "Great yapping! Now focus on completing testnet tasks to balance your skills." :
                         "Keep engaging with the community to boost your yapping score."
@@ -564,14 +809,55 @@
                 type: "tester",
                 rating: Math.round(compositeScore),
                 title: testerRating.title,
-                // message: `Your testing level is ${testerRating.level}`,
                 advice: testerRating.rating >= 80 ?
                     "Excellent testing! Now engage more with the community to boost your yapping." :
                     "Good testing progress! Complete more tasks and engage in discussions."
             };
         }
 
-        function displayResults(username, level, result, yapperRating, testerRating, userSeason0, userSeason1) {
+        function displaySpecialMember(username, isFounder, isCoFounder, isTeamMember) {
+            // Hide form and show results
+            document.getElementById('evaluationForm').style.display = 'none';
+            document.getElementById('resultsDisplay').style.display = 'block';
+            
+            // Hide regular elements
+            document.querySelectorAll('.breakdown-container, .progress-container, .quick-wins, .rating-type, .result-percentage, .result-description').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Set user info
+            document.getElementById('userName').textContent = '@' + username;
+            
+            // Set avatar from season data
+            document.getElementById('userAvatar').src = getProfilePictureFromSeasons(username);
+            
+            // Hide regular stats
+            document.getElementById('userLevel').style.display = 'none';
+            document.getElementById('userTitle').style.display = 'none';
+            document.getElementById('userXP').style.display = 'none';
+            
+            // Show special member display
+            const specialDisplay = document.getElementById('specialMemberDisplay');
+            specialDisplay.style.display = 'block';
+            
+            // Set appropriate badge
+            const badge = document.getElementById('unionBadge');
+            if (isFounder) {
+                badge.textContent = 'Union Founder';
+            } else if (isCoFounder) {
+                badge.textContent = 'Union Co-founder';
+            } else {
+                badge.textContent = 'Union Team';
+            }
+            
+            // Apply animations
+            const animateElements = document.querySelectorAll('.animate-in');
+            animateElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1 + 0.1}s`;
+            });
+        }
+
+        function displayResults(username, level, title, xp, result, yapperRating, testerRating, userSeason0, userSeason1, supabaseUser) {
             // Hide form and show results
             document.getElementById('evaluationForm').style.display = 'none';
             document.getElementById('resultsDisplay').style.display = 'block';
@@ -579,15 +865,25 @@
             // Set user info
             document.getElementById('userName').textContent = '@' + username;
             document.getElementById('userLevel').textContent = 'Level ' + level;
+            document.getElementById('userTitle').textContent = title;
+            document.getElementById('userXP').textContent = xp + ' XP';
             document.getElementById('ratingType').textContent = result.title;
             
             // Set breakdown scores
             document.getElementById('yapperScore').textContent = yapperRating.rating + '%';
             document.getElementById('testerScore').textContent = testerRating.rating + '%';
             
-            // Set avatar (prioritize season0 pfp if available)
-            const avatarSrc = (userSeason0 || userSeason1)?.pfp || 
-                             'https://abs.twimg.com/sticky/default_profile_images/default_profile_normal.png';
+            // Set avatar (prioritize season0 pfp if available, then Supabase, then fallback)
+            let avatarSrc = (userSeason0 || userSeason1)?.pfp;
+            if (!avatarSrc) {
+                try {
+                    const json = typeof supabaseUser.jsonInput === 'string' ? 
+                        JSON.parse(supabaseUser.jsonInput) : supabaseUser.jsonInput || {};
+                    avatarSrc = json.pfp || supabaseUser.pfp || getFallbackPfp(username);
+                } catch {
+                    avatarSrc = getFallbackPfp(username);
+                }
+            }
             document.getElementById('userAvatar').src = avatarSrc;
             
             // Animate progress bar
@@ -605,7 +901,15 @@
             
             // Set rating info
             document.getElementById('resultPercentage').textContent = result.rating + '% Union Active';
-            document.getElementById('resultDescription').textContent = result.message;
+            if (result.message) {
+                document.getElementById('resultDescription').textContent = result.message;
+            }
+
+            // Apply animations to all elements
+            const animateElements = document.querySelectorAll('.animate-in');
+            animateElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1 + 0.1}s`;
+            });
         }
 
         function shareOnTwitter() {
@@ -621,10 +925,14 @@
             });
         }
 
-        
-
-      </script>
-
+        // Enter key triggers form submission
+        document.getElementById('usernameInput').addEventListener('keydown', e => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('unionForm').dispatchEvent(new Event('submit'));
+            }
+        });
+    </script>
 
     <script src="./js/season0.js"></script>
     <script src="./js/season1.js"></script>
